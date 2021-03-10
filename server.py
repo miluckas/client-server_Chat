@@ -36,12 +36,15 @@ class Server(Int32StringReceiver):
             d['spisok'] = [i for i in self.users.values()]
             for protocol in self.users.keys():
                 protocol.sendString(pickle.dumps(d))
+
         elif 'mess' in data:
             if data['nameg'] != self.name and data['nameg'] != '':
                 for protocol in self.users.keys():
                     if data['nameg'] == self.users[protocol]:
                         data['client'] = self.name
                         protocol.sendString(pickle.dumps(data))
+                        self.sendString(pickle.dumps(data))
+
             elif data['nameg'] == self.name:
                 d = dict()
                 d['mess'] = "Can't send yourself a message"
